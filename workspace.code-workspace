@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../StarAdmin-Free-React-Admin-Template"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
