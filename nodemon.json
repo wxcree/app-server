@@ -6,8 +6,8 @@
     "src/client"
   ],
   "watch": [
-    "src/server"
+    "src/"
   ],
-  "exec": "tsc -p tsconfig.server.json && node server/",
+  "exec": "tsc && node server/",
   "ext": "ts"
 }
