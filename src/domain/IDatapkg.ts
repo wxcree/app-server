@@ -1,9 +1,18 @@
+import { IRet as IRet } from "./IBase";
 
-interface ITable {
-    name: string,
+export interface IPkgGetFrom {
+    pkgName: string,
 }
 
-export interface IDatapkgFrom {
+export interface IPkgGetRet extends IRet {
+    data: any[],
+}
+
+export interface IPkgSetFrom {
     pkgName: string,
-    pkgs: ITable[],
+}
+
+export interface IPkgAddFrom {
+    pkgName: string,
+    tableName: string,
 }

@@ -1,9 +1,9 @@
 import { IAuthRet, IAuthFrom } from "../domain/IAuth";
-import { IBase } from "../domain/IBase";
+import { IRet } from "../domain/IBase";
 import md5 from 'md5';
 import db from "../dbConfigs";
 
-async function verify(authFrom: IAuthFrom): Promise<IBase> {
+async function verify(authFrom: IAuthFrom): Promise<IRet> {
     const users = await db.find('users', {username: authFrom.username})
     const userinfo = await users.toArray();
     if (md5(authFrom.password) == userinfo[0]['password']) {
@@ -17,7 +17,7 @@ async function verify(authFrom: IAuthFrom): Promise<IBase> {
         }
         return ret;
     }
-    const ret: IBase = {
+    const ret: IRet = {
         code: 1,
         message: 'fail'
     }

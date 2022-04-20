@@ -1,4 +1,4 @@
-export interface IBase {
+export interface IRet {
     code : number,
     message : string,
 }

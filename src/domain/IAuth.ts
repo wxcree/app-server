@@ -1,6 +1,6 @@
-import { IBase } from "./IBase";
+import { IRet } from "./IBase";
 
-export interface IAuthRet extends IBase {
+export interface IAuthRet extends IRet {
     data : {
         userName: string,
         info: string,

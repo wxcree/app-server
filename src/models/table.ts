@@ -1,11 +1,11 @@
 import db from '../dbConfigs'
-import { IBase } from '../domain/IBase';
+import { IRet } from '../domain/IBase';
 import { ITableAdd, ITableAddRet, ITableGet, ITableGetRet } from '../domain/ITable'
 
 //{"pkgName":"Kimchi","tableName":"test","data":[
 //    {"test":1},{"test":2}
 //    ]}
-async function addTable(req: ITableAdd): Promise<IBase> {
+async function addTable(req: ITableAdd): Promise<IRet> {
     const { pkgName, tableName, data } = req;
     if (pkgName == undefined || tableName == undefined || data.length <= 0) {
         const ret: ITableAddRet = {
@@ -28,10 +28,10 @@ async function addTable(req: ITableAdd): Promise<IBase> {
 }
 
 //{"pkgName":"Kimchi","tableName":"test"}
-async function getTable(req: ITableGet): Promise<IBase> {
+async function getTable(req: ITableGet): Promise<IRet> {
     const { pkgName, tableName } = req;
     if (pkgName == undefined || tableName == undefined) {
-        const ret: IBase = {
+        const ret: IRet = {
             code: 1,
             message: 'fail',
         }

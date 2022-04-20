@@ -1,4 +1,4 @@
-import { IBase } from "./IBase";
+import { IRet } from "./IBase";
 
 export interface ITableAdd {
     pkgName: string,
@@ -6,7 +6,7 @@ export interface ITableAdd {
     data: any[],
 }
 
-export interface ITableAddRet extends IBase {
+export interface ITableAddRet extends IRet {
 
 }
 
@@ -15,6 +15,6 @@ export interface ITableGet {
     tableName: string,
 }
 
-export interface ITableGetRet extends IBase {
+export interface ITableGetRet extends IRet {
     data: []
 }
