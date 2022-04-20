@@ -1,41 +1,48 @@
-import mongoose, {Connection, Mongoose} from 'mongoose';
+import { Db, Document, Filter, FindOptions, MongoClient, OptionalId } from 'mongodb';
+import mongoose,{ mongo } from 'mongoose';
 import {configs} from './configs';
 import {IConfigs} from "./domain/IConfigs";
 
 class Database {
     private readonly _config: IConfigs;
-    private readonly _mongo: Mongoose;
+    private db: Db|null;
 
-    constructor(config: IConfigs, mongo: Mongoose) {
+    constructor(config: IConfigs) {
         this._config = config;
-        this._mongo = mongo;
+        this.db = null;
     }
 
-    dbConnection(): Mongoose {
-        const {mongodb: {url, port, collection, password, username}} = this._config;
+    async dbConnection() {
+        const {mongodb: {url, port, dbname, password, username}} = this._config;
         const mongoURL = (username && password)
-            ? `mongodb://${username}:${password}${url}:${port}/${collection}`
-            : `mongodb://${url}:${port}/${collection}`;
-        this._mongo
-            .connect(
-                mongoURL,
-                {useNewUrlParser: true, useUnifiedTopology: true}
-            );
-        const db: Connection = this._mongo.connection;
-        db.on('error', console.error.bind(console, 'connection error:'));
-        db.once('open', () => {
-            console.log("connected")
-        })
-        return mongoose;
+            ? `mongodb://${username}:${password}@${url}:${port}`
+            : `mongodb://${url}:${port}`;
+        console.log(mongoURL);
+        const client = await MongoClient.connect(mongoURL);
+        console.log('[+]database connected')
+        this.db = client.db(dbname);
+        return client.db(dbname);
     }
 
-    get mongo() {
-        return this._mongo;
+    async getdb(){
+        if(this.db != null)return this.db;
+        else return await this.dbConnection();
     }
 
-    get config() {
-        return this._config;
+    async insertOne(collection:string, doc:OptionalId<Document>){
+        (await this.getdb()).collection(collection).insertOne(doc);
+    }
+
+    async insertMany(collection:string, doc:OptionalId<Document>[]){
+        (await this.getdb()).collection(collection).insertMany(doc);
+    }
+    
+    //filter: Filter<TSchema>, options?: FindOptions): FindCursor<WithId<TSchema>>
+    async find(collection:string, filter?: Filter<Document>, options?: FindOptions<Document>) {
+        if(filter != undefined)
+            return (await this.getdb()).collection(collection).find(filter, options)
+        return (await this.getdb()).collection(collection).find({})
     }
 }
 
-export default Object.freeze(new Database(configs, mongoose));
+export default new Database(configs);

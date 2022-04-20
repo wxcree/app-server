@@ -7,7 +7,7 @@ export default (req: Request, res: Response, next: (param?: unknown) => void): v
         date: `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`,
         method: req.method,
         url: `${req.baseUrl}${req.url}`,
-        body: req.body
+        //body: req.body
     }])
     next();
 }

@@ -2,10 +2,10 @@ import {IConfigs} from "./domain/IConfigs";
 
 export const configs: IConfigs = {
     mongodb: {
-        url: 'localhost',
+        url: '192.168.1.126',
         port: 27017,
-        username: 'wxc',
-        password: 'MfmgYi0oFFAvJ2G1',
-        collection: 'test',
+        username: 'admin',
+        password: 'wxchahaha',
+        dbname: 'app',
     }
 }

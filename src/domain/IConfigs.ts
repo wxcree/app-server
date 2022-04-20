@@ -7,5 +7,5 @@ interface IMongo {
     port: number,
     username: string,
     password: string,
-    collection: string,
+    dbname: string,
 }
