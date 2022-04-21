@@ -15,11 +15,19 @@ async function addTable(req: ITableAdd): Promise<IRet> {
         return ret;
     }
 
+    // 一条数据占用一个记录，使用方便，虽然结构不规范
     for (const i in data) {
         data[i] = { ...data[i], _tableName: tableName, _pkgName: pkgName }
     }
-
     db.insertMany('tables', data);
+
+    // const d = {
+    //     _tableName: tableName,
+    //     _pkgName: pkgName,
+    //     data: data
+    // }
+
+    // db.insertOne('tables', d);
     const ret: ITableAddRet = {
         code: 0,
         message: 'success',
@@ -41,7 +49,7 @@ async function getTable(req: ITableGet): Promise<IRet> {
     const res = await db.find('tables',
         { _tableName: tableName, _pkgName: pkgName }
     );
-    res.project({ _id: 0, _tableName: 0, _pkgName: 0, test: 1 });
+    res.project({ _id: 0, _tableName: 0, _pkgName: 0});
     const data: any = await res.toArray();
 
     const ret: ITableGetRet = {
