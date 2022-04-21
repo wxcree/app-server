@@ -1,7 +1,7 @@
 import { IRet as IRet } from "./IBase";
 
 export interface IPkgGetFrom {
-    pkgName: string,
+    pkgName: string | undefined,
 }
 
 export interface IPkgGetRet extends IRet {
