@@ -1,64 +1,16 @@
-import {userInfo} from 'os';
 import router from '../router';
-import {Test} from '../../models';
 import {Request, Response} from "express";
-import {ITest} from "../../domain/ITest";
-import {IError} from '../../domain/IError';
 
-router.route('/test')
-    .get((req: Request, res: Response) => {
-        const {username}: {username: string} = userInfo();
-        if (!username) {
-            const error : IError = {
-                status: 500,
-                message: "Something bad happend!"
-            }
-            res.status(error.status).json(error);
-        }
-        res.json({username});
+router.route('/home')
+    .get(async (req: Request, res: Response) => {
+        const ret = {"data":{"numberCards":[{"icon":"pay-circle-o","color":"#79d7f2","title":"Barbara Miller","number":5972},{"icon":"team","color":"#f2ea79","title":"Edward Young","number":169},{"icon":"message","color":"#c679f2","title":"Jennifer Thompson","number":5047},{"icon":"shopping-cart","color":"#79f2a3","title":"Margaret Jackson","number":7430}],"LineBarChartOption":{"title":"世志着向历","series":[{"name":"和实切半思","data":[99.7,137.44,274.35,268.5,275.32,293.4,268.8],"type":"bar"},{"name":"车好性改文","data":[205.1,104.5,93.8,158.84,81.8,103.58,71.1],"type":"line"}],"xAxisData":["民老","证非","我打","交斯","华题","标重","她律"]},"pieOptions":{"name":"出眼入却些","datas":[{"value":81,"name":"邵涛"},{"value":83,"name":"孟艳"},{"value":31,"name":"姜涛"},{"value":15,"name":"毛明"},{"value":22,"name":"毛洋"},{"value":86,"name":"孙艳"},{"value":69,"name":"刘敏"}]},"orderTable":[{"name":"梁军","status":1,"timer":"1988-11-07 05:40:06","prize":3110,"key":"#EYNxmhR"},{"name":"陈桂英","status":1,"timer":"1976-11-17 10:47:41","prize":8633,"key":"eoPpOVFO"},{"name":"黎勇","status":2,"timer":"1991-09-06 11:07:34","prize":2184,"key":"kd^iIC$r7"},{"name":"程秀兰","status":1,"timer":"1971-01-30 20:28:39","prize":7619,"key":"PI!1xuc"},{"name":"林平","status":1,"timer":"1975-05-23 15:21:20","prize":2899,"key":"4(]9uc5gu"},{"name":"白艳","status":1,"timer":"1974-10-23 11:34:10","prize":2713,"key":"$G7s@jj"},{"name":"顾超","status":2,"timer":"1989-12-10 08:20:01","prize":9624,"key":"$WMT8[Tux"},{"name":"罗超","status":3,"timer":"2016-05-01 21:53:17","prize":8670,"key":"UgPvQUPA"},{"name":"胡秀英","status":2,"timer":"1998-08-24 03:08:55","prize":4204,"key":"k$S3AgrDF$"},{"name":"韩洋","status":1,"timer":"1975-02-01 06:46:41","prize":5305,"key":"3HrmLcP"}],"CommentList":[{"actions":"式按","author":"乔超","content":"第学两实事般容县数看查厂证干。小上温入观将西量联热严白意元支不。步会易形对问到确九当酸非调。给今新红家改龙写龙走级油起。","datetime":"1974-12-15 04:21:09"},{"actions":"东机","author":"常敏","content":"和求商具果月制身府片日什府。效们基保教据明维至它只于省车。切周实引式老克务见下称观基复。整先算展研直海车较此京生很广下受展。","datetime":"2004-12-30 20:19:00"},{"actions":"大情","author":"阎芳","content":"铁新期示边子斯质日战动斗部验本采。领九等造白图生号海织千音小品证。江新特无由转习低存去民中马体达出听质。规角应为装千加新劳受义达便将律相。","datetime":"2012-06-22 06:33:59"}]},"code":0,"message":"success"};
+        res.json(ret);
     })
-    .post(async (req: Request, res: Response) => {
-        // const {text}: { text: string } = req.body;
-        // const Text: ITest = new Test({text});
-        // try {
-        //     const savedText: ITest = await Text.save();
-        //     res.status(201).json(savedText);
-        // } catch (e) {
-        //     const error: IError = {
-        //         status: 500,
-        //         message: "An error happened!"
-        //     }
-        //     console.error(e);
-        //     res.status(error.status).json({message: "An error happened"});
-        // }
+
+router.route('/table1')
+    .get(async (req: Request, res: Response) => {
+        const ret = {"data":{"list":[{"nameEN":"William Lopez","nameCN":"何秀兰","county":"天津 天津市 红桥区","timer":"2014-08-04 23:03:18","key":"NjJp6Brg68"},{"nameEN":"Christopher Jackson","nameCN":"雷强","county":"湖北省 咸宁市 咸安区","timer":"1992-09-02 04:50:27","key":"UupRCe7"},{"nameEN":"Mary Williams","nameCN":"毛洋","county":"天津 天津市 西青区","timer":"2014-11-23 07:05:32","key":")Ipq3Qv*c"},{"nameEN":"Ronald Martin","nameCN":"谭洋","county":"北京 北京市 丰台区","timer":"2008-09-22 16:33:12","key":"2wx9w8M"},{"nameEN":"Linda Davis","nameCN":"邓杰","county":"青海省 海南藏族自治州 同德县","timer":"1986-01-31 19:09:21","key":"1U3*8VVi1A"},{"nameEN":"Brian Perez","nameCN":"周平","county":"澳门特别行政区 澳门半岛 -","timer":"2009-11-13 21:08:56","key":"GMYUVo1tR6"},{"nameEN":"Brian Allen","nameCN":"程平","county":"河北省 保定市 徐水县","timer":"2003-03-25 23:26:09","key":"yk(CR5gF"},{"nameEN":"Brian Jones","nameCN":"黎桂英","county":"广东省 揭阳市 揭东区","timer":"1999-04-10 09:29:50","key":"LCYhAFxSu"},{"nameEN":"Christopher Gonzalez","nameCN":"方强","county":"河北省 张家口市 涿鹿县","timer":"1973-11-30 17:07:13","key":"40dQyJND"},{"nameEN":"Eric Taylor","nameCN":"白艳","county":"贵州省 六盘水市 水城县","timer":"1983-04-03 21:59:15","key":"sTCrBk5u"}],"totalPage":200},"code":0,"message":"success"};
+        res.json(ret);
     })
-    .put((req: Request, res: Response) => {
-        // const {id, text}: {id: string, text: string} = req.body;
-        // Test.updateOne({_id: id}, {text}, {}, (err, test) => {
-        //     if (err){
-        //         const error: IError ={
-        //             status: 500,
-        //             message: "It can't be updated at this moment!"
-        //         }
-        //         console.error(err);
-        //         res.status(error.status).json(error);
-        //     }
-        //     else res.status(200).json({_id: id, text, ...test});
-        // })
-    })
-    .delete((req: Request, res: Response) => {
-        const {id}: {id: string} = req.body;
-        // Test.deleteOne({_id: id}, {}, (err) => {
-        //     if (err){
-        //         const error: IError = {
-        //             status: 500,
-        //             message: "Resource can't be deleted!"
-        //         }
-        //         console.error(err);
-        //         res.status(error.status).json(error);
-        //     }
-        //     else res.status(200).json({_id: id, text: "deleted successfully"});
-        // })
-    });
 
 export default router;
