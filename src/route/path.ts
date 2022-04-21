@@ -8,9 +8,11 @@ function path(url: string): IPathRoute {
         "/extra": {
             methods: ["POST", "GET", "PUT"]
         },
+        // auth
         "/auth": {
             methods: ["POST"]
         },
+        // tables
         "/gettable": {
             methods: ["POST"]
         },
@@ -18,6 +20,16 @@ function path(url: string): IPathRoute {
             methods: ["POST"]
         },
         "/updatetable": {
+            methods: ["POST"]
+        },
+        // pkgs
+        "/getpkg": {
+            methods: ["POST"]
+        },
+        "/setpkg": {
+            methods: ["POST"]
+        },
+        "/addpkg": {
             methods: ["POST"]
         },
     }
