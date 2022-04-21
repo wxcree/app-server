@@ -2,11 +2,12 @@ import {Ipath, IPathRoute} from "../domain/IPath";
 
 function path(url: string): IPathRoute {
     const allRoutes: Ipath = {
-        "/test": {
-            methods: ["POST", "GET", "PUT", "DELETE"]
+        // home and test
+        "/home": {
+            methods: ["POST", "GET"]
         },
-        "/extra": {
-            methods: ["POST", "GET", "PUT"]
+        "/table1": {
+            methods: ["POST", "GET"]
         },
         // auth
         "/auth": {
@@ -32,7 +33,13 @@ function path(url: string): IPathRoute {
         "/addpkg": {
             methods: ["POST"]
         },
+        
     }
+
+    // 处理query部分
+    const index = url.indexOf('?');
+    if(index > 0)
+        url = url.slice(0, index);
     return allRoutes[url];
 }
 
