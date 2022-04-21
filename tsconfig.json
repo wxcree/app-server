@@ -12,10 +12,10 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "./server",
     "moduleResolution": "node",
-    "sourceMap": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }     
+    "sourceMap": true
+    // "paths": {
+    //   "@/*": ["./src/*"]
+    // }     
   },
   "awesomeTypescriptLoaderOptions": {
     /* ... */
