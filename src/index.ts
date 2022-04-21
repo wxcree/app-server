@@ -35,4 +35,5 @@ app.use('/api', routes);
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log(`[+]App listening on ${port}`);
+console.log(`============================`);
+console.log(`[+] App listening on ${port}`);

@@ -1,4 +1,4 @@
-import { Db, Document, Filter, FindOptions, MongoClient, OptionalId } from 'mongodb';
+import { Db, Document, Filter, FindOptions, MongoClient, OptionalId, UpdateFilter } from 'mongodb';
 import mongoose,{ mongo } from 'mongoose';
 import {configs} from './configs';
 import {IConfigs} from "./domain/IConfigs";
@@ -17,9 +17,8 @@ class Database {
         const mongoURL = (username && password)
             ? `mongodb://${username}:${password}@${url}:${port}`
             : `mongodb://${url}:${port}`;
-        console.log(mongoURL);
         const client = await MongoClient.connect(mongoURL);
-        console.log('[+]database connected')
+        console.log('[+] database connected')
         this.db = client.db(dbname);
         return client.db(dbname);
     }
@@ -42,6 +41,10 @@ class Database {
         if(filter != undefined)
             return (await this.getdb()).collection(collection).find(filter, options)
         return (await this.getdb()).collection(collection).find({})
+    }
+
+    async update(collection:string, filter: Filter<Document>, update: UpdateFilter<Document>){
+        return (await this.getdb()).collection(collection).updateMany(filter, update)
     }
 }
 
