@@ -1,5 +1,4 @@
 import router from '../router';
-import { verify } from '../../models/auth';
 import { Request, Response } from "express";
 import { ITableAdd, ITableGet } from '../../domain/ITable';
 import { addTable, getTable } from '../../models/table';
