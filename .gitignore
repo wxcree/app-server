@@ -1,5 +1,6 @@
 .vscode
 workspace.code-workspace
+note.md
 node_modules
 .idea
 server/**
