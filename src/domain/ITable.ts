@@ -4,6 +4,7 @@ export interface ITableAdd {
     pkgName: string,
     tableName: string,
     data: any[],
+    info: any[]
 }
 
 export interface ITableAddRet extends IRet {

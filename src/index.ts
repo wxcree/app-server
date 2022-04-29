@@ -10,7 +10,8 @@ const app: Express = express(); // define our app using express
 // configure app to use bodyParser for
 // Getting data from body of requests
 app.use(express.urlencoded({extended: true}) as RequestHandler);
-
+// body limit
+app.use(express.json({limit: '500mb'}))
 app.use(express.json() as RequestHandler) 
 
 

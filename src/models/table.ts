@@ -6,8 +6,8 @@ import { ITableAdd, ITableAddRet, ITableGet, ITableGetRet } from '../domain/ITab
 //    {"test":1},{"test":2}
 //    ]}
 async function addTable(req: ITableAdd): Promise<IRet> {
-    const { pkgName, tableName, data } = req;
-    if (pkgName == undefined || tableName == undefined || data.length <= 0) {
+    const { pkgName, tableName, data, info } = req;
+    if (pkgName == undefined || tableName == undefined || data.length <= 0 || info.length <= 0) {
         const ret: ITableAddRet = {
             code: 1,
             message: 'fail',
@@ -16,18 +16,20 @@ async function addTable(req: ITableAdd): Promise<IRet> {
     }
 
     // 一条数据占用一个记录，使用方便，虽然结构不规范
-    for (const i in data) {
-        data[i] = { ...data[i], _tableName: tableName, _pkgName: pkgName }
-    }
-    db.insertMany('tables', data);
-
-    // const d = {
-    //     _tableName: tableName,
-    //     _pkgName: pkgName,
-    //     data: data
+    // for (const i in data) {
+    //     data[i] = { ...data[i], _tableName: tableName, _pkgName: pkgName }
     // }
+    // db.insertMany('tables', data);
 
-    // db.insertOne('tables', d);
+    // 一条记录对应一个数据表，可以记录更多信息，数据主题信息更新需要考虑
+    const d = {
+        tableName: tableName,
+        pkgName: pkgName,
+        data: data,
+        info: info
+    }
+
+    db.insertOne('tables', d);
     const ret: ITableAddRet = {
         code: 0,
         message: 'success',
@@ -47,15 +49,14 @@ async function getTable(req: ITableGet): Promise<IRet> {
     }
 
     const res = await db.find('tables',
-        { _tableName: tableName, _pkgName: pkgName }
+        { tableName: tableName, pkgName: pkgName }
     );
     res.project({ _id: 0, _tableName: 0, _pkgName: 0});
     const data: any = await res.toArray();
-
     const ret: ITableGetRet = {
         code: 0,
         message: 'success',
-        data: data
+        data: data[0]
     }
     return ret;
 }
