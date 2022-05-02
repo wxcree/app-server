@@ -1,51 +1,61 @@
-import { Db, Document, Filter, FindOptions, MongoClient, OptionalId, UpdateFilter } from 'mongodb';
-import mongoose,{ mongo } from 'mongoose';
 import {configs} from './configs';
 import {IConfigs} from "./domain/IConfigs";
+import mysql from 'mysql2/promise'
 
 class Database {
+
     private readonly _config: IConfigs;
-    private db: Db|null;
+    private sysdb: null | mysql.Connection
+    private datadb: null | mysql.Connection
 
     constructor(config: IConfigs) {
-        this._config = config;
-        this.db = null;
+        this._config = config
+        this.sysdb = null
+        this.datadb = null
     }
 
     async dbConnection() {
-        const {mongodb: {url, port, dbname, password, username}} = this._config;
-        const mongoURL = (username && password)
-            ? `mongodb://${username}:${password}@${url}:${port}`
-            : `mongodb://${url}:${port}`;
-        const client = await MongoClient.connect(mongoURL);
+        const {url, port, dbname, password, username, dataset} = this._config;
+        this.sysdb = await mysql.createConnection({host:url, port:port, user: username, password: password,database: dbname});
+        this.datadb = await mysql.createConnection({host:url, port:port, user: username, password: password,database: dataset});
         console.log('[+] database connected')
-        this.db = client.db(dbname);
-        return client.db(dbname);
     }
 
-    async getdb(){
-        if(this.db != null)return this.db;
-        else return await this.dbConnection();
+    async getsysdb(){
+        if(this.sysdb == null)await this.dbConnection();
+        return this.sysdb
     }
 
-    async insertOne(collection:string, doc:OptionalId<Document>){
-        (await this.getdb()).collection(collection).insertOne(doc);
+    async getdatadb(){
+        if(this.datadb == null)await this.dbConnection();
+        return this.datadb
     }
 
-    async insertMany(collection:string, doc:OptionalId<Document>[]){
-        (await this.getdb()).collection(collection).insertMany(doc);
+    async sysQuery(query: string){
+        return await (await this.getsysdb())?.execute(query);
     }
+
+    async dataQuery(query: string){
+        return await (await this.getdatadb())?.execute(query);
+    }
+    // async insertOne(collection:string, doc:OptionalId<Document>){
+    //     (await this.getdb()).collection(collection).insertOne(doc);
+    // }
+
+    // async insertMany(collection:string, doc:OptionalId<Document>[]){
+    //     (await this.getdb()).collection(collection).insertMany(doc);
+    // }
     
-    //filter: Filter<TSchema>, options?: FindOptions): FindCursor<WithId<TSchema>>
-    async find(collection:string, filter?: Filter<Document>, options?: FindOptions<Document>) {
-        if(filter != undefined)
-            return (await this.getdb()).collection(collection).find(filter, options)
-        return (await this.getdb()).collection(collection).find({})
-    }
+    // //filter: Filter<TSchema>, options?: FindOptions): FindCursor<WithId<TSchema>>
+    // async find(collection:string, filter?: Filter<Document>, options?: FindOptions<Document>) {
+    //     if(filter != undefined)
+    //         return (await this.getdb()).collection(collection).find(filter, options)
+    //     return (await this.getdb()).collection(collection).find({})
+    // }
 
-    async update(collection:string, filter: Filter<Document>, update: UpdateFilter<Document>){
-        return (await this.getdb()).collection(collection).updateMany(filter, update)
-    }
+    // async update(collection:string, filter: Filter<Document>, update: UpdateFilter<Document>){
+    //     return (await this.getdb()).collection(collection).updateMany(filter, update)
+    // }
 }
 
 export default new Database(configs);

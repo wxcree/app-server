@@ -1,21 +1,31 @@
 import { IPkgGetFrom, IPkgGetRet, IPkgSetFrom, IPkgAddFrom } from '../domain/IDatapkg';
 import db from '../dbConfigs'
 import { IRet } from '../domain/IBase';
+import { getPkgInfo, insertPkg, insertTableByName } from '../utils/pkg';
 
 async function getPkgs(content: IPkgGetFrom): Promise<IPkgGetRet> {
     const { pkgName } = content;
-    let data: any[] = [];
-    let query = {};
-    if (pkgName == undefined) {
-        query = {};
-    } else {
-        query = {
-            pkgName: pkgName
-        };
+    const data: any[] = [];
+    const res = await getPkgInfo(pkgName)
+    const tmp: any = {}
+    let index = 0
+    for(const i in res){
+        let pkgNameIndex = tmp[res[i].pkgName]
+        if(pkgNameIndex === undefined){
+            data.push({
+                pkgName: res[i].pkgName,
+                tables: []
+            })
+            pkgNameIndex = index
+            tmp[res[i].pkgName] = index
+            index += 1
+        }
+        if(res[i].tableName !== null)
+            data[pkgNameIndex].tables.push(res[i].tableName)
     }
-    const res = await db.find('datapkg', query);
-    res.project({ _id: 0 });
-    data = (await res.toArray());
+    // const res = await db.find('datapkg', query);
+    // res.project({ _id: 0 });
+    // data = (await res.toArray());
 
     const ret: IPkgGetRet = {
         code: 0,
@@ -35,7 +45,7 @@ async function setPkgs(content: IPkgSetFrom): Promise<IRet> {
         return ret;
     }
 
-    db.insertOne('datapkg', { pkgName: pkgName, tables: [] });
+    insertPkg(pkgName)
     const ret: IRet = {
         code: 0,
         message: 'success',
@@ -70,18 +80,7 @@ async function pkgAdd(content: IPkgAddFrom): Promise<IRet> {
         }
         return ret;
     }
-    // TODO: 重复名字添加识别
-    const updateDocument: any = {
-        $push: { "tables": tableName }
-    };
-    const res = await db.update(
-        'datapkg',
-        { pkgName: pkgName },
-        updateDocument
-    )
-    // res.push({
-    //     'tables': tableName
-    // });
+    await insertTableByName(pkgName, tableName)
     const ret: IPkgGetRet = {
         code: 0,
         message: 'success',
