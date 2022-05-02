@@ -70,7 +70,7 @@ export async function insertTableData(tableName: string, data: any[]): Promise<n
     insertColumnsByName(tableName, col)
     for (const i in ins) {
         try {
-            //await db.dataQuery(ins[i])
+            await db.dataQuery(ins[i])
             ret += 1
         } catch (e) {
             ret += 0
@@ -82,7 +82,7 @@ export async function insertTableData(tableName: string, data: any[]): Promise<n
 export async function getTableId(pkgName: string): Promise<number> {
     const query = `SELECT id FROM ${businessTable} WHERE table_name='${pkgName}'`
     const res: any = await db.sysQuery(query)
-    // console.log(ret[0][0]['id'])
+    if(res[0][0] === undefined)return 0
     const ret = res[0][0]['id']
     return ret
 }
@@ -109,11 +109,12 @@ export async function insertColumnsById(tableId: number, columns: IColums[]): Pr
 }
 
 export async function getTableData(tableName: string): Promise<any[]> {
-    const dQuery = `SELECT * FROM ${tableName}`
+    const dQuery = `SELECT * FROM \`${tableName}\``
     try{
         const res: any = await db.dataQuery(dQuery)
         return res[0]
     }catch(e){
+        // console.log(e)
         console.log('get table data fail')
     }
     return []

@@ -2,7 +2,7 @@ import db from '../dbConfigs'
 import { IRet } from '../domain/IBase';
 import { ITableAdd, ITableAddRet, ITableGet, ITableGetRet } from '../domain/ITable'
 import { insertTableByName } from '../utils/pkg';
-import { getTableData, insertTableData } from '../utils/table';
+import { getTableData, getTableId, insertTableData } from '../utils/table';
 
 //{"pkgName":"Kimchi","tableName":"test","data":[
 //    {"test":1},{"test":2}
@@ -32,11 +32,35 @@ async function addTable(req: ITableAdd): Promise<IRet> {
     // }
 
     // db.insertOne('tables', d);
-    // insertTableByName(pkgName, tableName)
-    await insertTableData(tableName, data)
+    const id = await getTableId(tableName)
+    if(id != 0){
+        const ret: ITableAddRet = {
+            code: 1,
+            message: 'table is aleady exist',
+        }
+        return ret;
+    }
+    const res = await insertTableByName(pkgName, tableName)
+    if(!res){
+        const ret: ITableAddRet = {
+            code: 1,
+            message: 'insert table name fail',
+        }
+        return ret;
+    }
+    const total = await insertTableData(tableName, data)
+    if(total == 0){
+        const ret: ITableAddRet = {
+            code: 1,
+            message: 'insert table data fail',
+            data: total
+        }
+        return ret;
+    }
     const ret: ITableAddRet = {
         code: 0,
         message: 'success',
+        data: total
     }
     return ret;
 }
@@ -59,8 +83,8 @@ async function getTable(req: ITableGet): Promise<IRet> {
     // res.project({ _id: 0, _tableName: 0, _pkgName: 0});
     const data: any = await getTableData(tableName);
     const ret: ITableGetRet = {
-        code: 0,
-        message: 'success',
+        code: data.length > 0 ? 0 : 1,
+        message: data.length >0 ? 'success' : 'get data fail',
         data: data
     }
     return ret;

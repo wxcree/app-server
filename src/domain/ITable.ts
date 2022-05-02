@@ -8,7 +8,7 @@ export interface ITableAdd {
 }
 
 export interface ITableAddRet extends IRet {
-
+    data?: number
 }
 
 export interface ITableGet {

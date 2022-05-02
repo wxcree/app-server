@@ -1,7 +1,7 @@
 import {ITest} from "../domain/ITest";
 import Database from '../dbConfigs';
 import mysql from 'mysql2/promise'
-import { getColumns, getDDL, getInserts, getTableData, getTableInfo } from "../utils/table";
+import { getColumns, getDDL, getInserts, getTableData, getTableId, getTableInfo } from "../utils/table";
 import { getPkgId, getPkgInfo, insertPkg } from "../utils/pkg";
 // import {Schema, model} from "mongoose";
 
@@ -187,6 +187,8 @@ async function test(){
   getTableData('testTable')
   getTableInfo('testTable')
   getPkgInfo()
+  const id = await getTableId('1231231')
+  console.log(id)
 }
 
 test()
