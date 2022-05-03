@@ -16,6 +16,13 @@ export interface ITableGet {
     tableName: string,
 }
 
+export interface ITableMutiGet {
+    pkgName: string,
+    tableName: string,
+    columns: string[],
+    values: string[]
+}
+
 export interface ITableGetRet extends IRet {
     data: []
 }

@@ -17,6 +17,9 @@ function path(url: string): IPathRoute {
         "/gettable": {
             methods: ["POST"]
         },
+        "/getmutiltable": {
+            methods: ["POST"]
+        },
         "/addtable": {
             methods: ["POST"]
         },

@@ -108,7 +108,7 @@ export async function insertColumnsById(tableId: number, columns: IColums[]): Pr
     return ret
 }
 
-export async function getTableData(tableName: string): Promise<any[]> {
+export async function getTableData(tableName: string, cloumns?: string[], values?: string[]): Promise<any[]> {
     const dQuery = `SELECT * FROM \`${tableName}\``
     try{
         const res: any = await db.dataQuery(dQuery)
@@ -116,6 +116,24 @@ export async function getTableData(tableName: string): Promise<any[]> {
     }catch(e){
         // console.log(e)
         console.log('get table data fail')
+    }
+    return []
+}
+
+export async function getTableMutiData(tableName: string, columns: string[], values?: string[], method = 'SUM'): Promise<any[]>{
+    let con1 = ''
+    let con2 = ''
+    if(values != undefined){
+        con2 += ',' + values.map(i => `${method}(${i}) as ${i}`)
+        con1 += ` GROUP BY ${columns}`
+    }
+    const dQuery = `SELECT ${columns} ${con2} FROM \`${tableName}\` ${con1}`
+    try{
+        const res: any = await db.dataQuery(dQuery)
+        return res[0]
+    }catch(e){
+        console.log(e)
+        console.log('get table mutil data fail')
     }
     return []
 }

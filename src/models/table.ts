@@ -1,8 +1,8 @@
 import db from '../dbConfigs'
 import { IRet } from '../domain/IBase';
-import { ITableAdd, ITableAddRet, ITableGet, ITableGetRet } from '../domain/ITable'
+import { ITableAdd, ITableAddRet, ITableGet, ITableGetRet, ITableMutiGet } from '../domain/ITable'
 import { insertTableByName } from '../utils/pkg';
-import { getTableData, getTableId, insertTableData } from '../utils/table';
+import { getTableData, getTableId, getTableMutiData, insertTableData } from '../utils/table';
 
 //{"pkgName":"Kimchi","tableName":"test","data":[
 //    {"test":1},{"test":2}
@@ -76,11 +76,6 @@ async function getTable(req: ITableGet): Promise<IRet> {
         return ret;
     }
 
-    // const res = await db.find('tables',
-    //     { tableName: tableName, pkgName: pkgName }
-    // );
-    const res = {}
-    // res.project({ _id: 0, _tableName: 0, _pkgName: 0});
     const data: any = await getTableData(tableName);
     const ret: ITableGetRet = {
         code: data.length > 0 ? 0 : 1,
@@ -90,7 +85,27 @@ async function getTable(req: ITableGet): Promise<IRet> {
     return ret;
 }
 
+async function getTableMutil(req: ITableMutiGet): Promise<IRet> {
+    const { pkgName, tableName, columns, values } = req;
+    if (pkgName == undefined || tableName == undefined) {
+        const ret: IRet = {
+            code: 1,
+            message: 'fail',
+        }
+        return ret;
+    }
+
+    const data: any = await getTableMutiData(tableName, columns, values);
+    const ret: ITableGetRet = {
+        code: data.length > 0 ? 0 : 1,
+        message: data.length >0 ? 'success' : 'get mutil data fail',
+        data: data
+    }
+    return ret;
+}
+
 export {
     addTable,
     getTable,
+    getTableMutil,
 }
