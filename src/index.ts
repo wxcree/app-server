@@ -19,7 +19,6 @@ const port: number = Number(process.env.PORT) || 8050; // set our port
 
 // connect to database. right now it's just working with mongodb
 // but in near future it will be configured for other databases as well
-DBConnect.dbConnection();
 
 // Send index.html on root request
 app.use(express.static('dist'));

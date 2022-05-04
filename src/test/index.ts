@@ -28,7 +28,6 @@ async function test(){
   //   })
   // }
   // console.log(ret)
-  await Database.dbConnection()
   const res = await getTableMutiData('流水1', ['营业日期', '经营模式', '订单状态', '结账方式'], ['订单原价（元）', '订单收入（元）'])
   console.log(res)
 }

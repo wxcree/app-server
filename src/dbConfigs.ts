@@ -5,38 +5,58 @@ import mysql from 'mysql2/promise'
 class Database {
 
     private readonly _config: IConfigs;
-    private sysdb: null | mysql.Connection
-    private datadb: null | mysql.Connection
+    private sysdb: null | mysql.Pool
+    private datadb: null | mysql.Pool
 
     constructor(config: IConfigs) {
         this._config = config
         this.sysdb = null
         this.datadb = null
+        this.dbConnection()
     }
 
-    async dbConnection() {
+    private dbConnection() {
         const {url, port, dbname, password, username, dataset} = this._config;
-        this.sysdb = await mysql.createConnection({host:url, port:port, user: username, password: password,database: dbname});
-        this.datadb = await mysql.createConnection({host:url, port:port, user: username, password: password,database: dataset});
+        this.sysdb = mysql.createPool({
+            host:url, 
+            port:port, 
+            user: username, 
+            password: password,
+            database: dbname,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
+        });
+        this.datadb = mysql.createPool({
+            host:url, 
+            port:port, 
+            user: username, 
+            password: password,
+            database: dataset,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
+        });
+        console.log('============================')
         console.log('[+] database connected')
     }
 
-    async getsysdb(){
-        if(this.sysdb == null)await this.dbConnection();
+    getsysdb(){
+        if(this.sysdb == null)this.dbConnection();
         return this.sysdb
     }
 
-    async getdatadb(){
-        if(this.datadb == null)await this.dbConnection();
+    getdatadb(){
+        if(this.datadb == null)this.dbConnection();
         return this.datadb
     }
 
     async sysQuery(query: string){
-        return await (await this.getsysdb())?.execute(query);
+        return await this.getsysdb()?.execute(query);
     }
 
     async dataQuery(query: string){
-        return await (await this.getdatadb())?.execute(query);
+        return await this.getdatadb()?.execute(query);
     }
     // async insertOne(collection:string, doc:OptionalId<Document>){
     //     (await this.getdb()).collection(collection).insertOne(doc);
