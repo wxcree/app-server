@@ -37,7 +37,7 @@ class Database {
             connectionLimit: 10,
             queueLimit: 0
         });
-        console.log('============================')
+        console.clear()
         console.log('[+] database connected')
     }
 
