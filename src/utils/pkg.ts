@@ -51,6 +51,5 @@ export async function getPkgInfo(pkgName?: string): Promise<any[]> {
     if(pkgName !== undefined) con = `WHERE bp.name='${pkgName}'`
     const query = `SELECT bp.name as pkgName, bt.table_name as tableName, bt.type FROM ${businessPkg} bp LEFT JOIN ${businessTable} bt ON bp.id=bt.pkgid ${con}`
     const res: any = await db.sysQuery(query)
-    console.log(res[0])
     return res[0]
 }

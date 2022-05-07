@@ -23,6 +23,9 @@ function path(url: string): IPathRoute {
         "/addtable": {
             methods: ["POST"]
         },
+        "/savetable": {
+            methods: ["POST"]
+        },
         "/updatetable": {
             methods: ["POST"]
         },

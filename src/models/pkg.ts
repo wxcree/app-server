@@ -7,6 +7,7 @@ async function getPkgs(content: IPkgGetFrom): Promise<IPkgGetRet> {
     const { pkgName } = content;
     const data: any[] = [];
     const res = await getPkgInfo(pkgName)
+    console.log(res)
     const tmp: any = {}
     let index = 0
     for(const i in res){
@@ -21,7 +22,7 @@ async function getPkgs(content: IPkgGetFrom): Promise<IPkgGetRet> {
             index += 1
         }
         if(res[i].tableName !== null)
-            data[pkgNameIndex].tables.push(res[i].tableName)
+            data[pkgNameIndex].tables.push({tableName: res[i].tableName, type: res[i].type})
     }
     // const res = await db.find('datapkg', query);
     // res.project({ _id: 0 });

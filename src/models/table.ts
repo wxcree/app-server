@@ -1,8 +1,8 @@
 import db from '../dbConfigs'
 import { IRet } from '../domain/IBase';
-import { ITableAdd, ITableAddRet, ITableGet, ITableGetRet, ITableMutiGet } from '../domain/ITable'
+import { ITableAdd, ITableAddRet, ITableGet, ITableGetRet, ITableMutiGet, ITableViewAdd } from '../domain/ITable'
 import { insertTableByName } from '../utils/pkg';
-import { getTableData, getTableId, getTableMutiData, insertTableData } from '../utils/table';
+import { createView, getTableData, getTableId, getTableMutiData, insertTableData } from '../utils/table';
 
 //{"pkgName":"Kimchi","tableName":"test","data":[
 //    {"test":1},{"test":2}
@@ -31,7 +31,7 @@ async function addTable(req: ITableAdd): Promise<IRet> {
     //     info: info
     // }
 
-    // db.insertOne('tables', d);
+    // 检测表是否已经存在
     const id = await getTableId(tableName)
     if(id != 0){
         const ret: ITableAddRet = {
@@ -40,6 +40,8 @@ async function addTable(req: ITableAdd): Promise<IRet> {
         }
         return ret;
     }
+
+    // 向数据包表插入记录
     const res = await insertTableByName(pkgName, tableName)
     if(!res){
         const ret: ITableAddRet = {
@@ -48,6 +50,8 @@ async function addTable(req: ITableAdd): Promise<IRet> {
         }
         return ret;
     }
+
+    // 插入数据表数据
     const total = await insertTableData(tableName, data)
     if(total == 0){
         const ret: ITableAddRet = {
@@ -63,6 +67,44 @@ async function addTable(req: ITableAdd): Promise<IRet> {
         data: total
     }
     return ret;
+}
+
+async function addView(content: ITableViewAdd) {
+    const { pkgName, tableName, viewName, columns, values } = content;
+    if (pkgName == undefined || tableName == undefined || viewName == undefined || columns == undefined || columns.length == 0 ) {
+        const ret: ITableAddRet = {
+            code: 1,
+            message: 'fail',
+        }
+        return ret;
+    }
+
+    // 向数据包表插入记录
+    const res = await insertTableByName(pkgName, viewName, 1)
+    if(!res){
+        const ret: ITableAddRet = {
+            code: 1,
+            message: 'insert table name fail',
+        }
+        return ret;
+    }
+
+    // 创建视图
+    const ret = await createView(tableName, viewName, columns, values)
+    if(!ret){
+        const ret: ITableAddRet = {
+            code: 1,
+            message: 'create view name fail',
+        }
+        return ret;
+    }
+    // TODO: 插入view的colums信息
+
+    const ret1: IRet = {
+        code: 0,
+        message: 'success',
+    }
+    return ret1;
 }
 
 //{"pkgName":"Kimchi","tableName":"test"}
@@ -106,6 +148,7 @@ async function getTableMutil(req: ITableMutiGet): Promise<IRet> {
 
 export {
     addTable,
+    addView,
     getTable,
     getTableMutil,
 }

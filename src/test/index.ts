@@ -1,7 +1,7 @@
 import {ITest} from "../domain/ITest";
 import Database from '../dbConfigs';
 import mysql from 'mysql2/promise'
-import { getColumns, getDDL, getInserts, getTableData, getTableId, getTableInfo, getTableMutiData } from "../utils/table";
+import { createView, getColumns, getDDL, getInserts, getTableData, getTableId, getTableInfo, getTableMutiData } from "../utils/table";
 import { getPkgId, getPkgInfo, insertPkg } from "../utils/pkg";
 // import {Schema, model} from "mongoose";
 
@@ -28,7 +28,7 @@ async function test(){
   //   })
   // }
   // console.log(ret)
-  const res = await getTableMutiData('流水1', ['营业日期', '经营模式', '订单状态', '结账方式'], ['订单原价（元）', '订单收入（元）'])
+  const res = await createView('流水1', '流水1副本',['营业日期', '经营模式', '订单状态', '结账方式'], ['订单原价（元）', '订单收入（元）'])
   console.log(res)
 }
 

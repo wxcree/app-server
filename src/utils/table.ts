@@ -123,7 +123,9 @@ export async function getTableData(tableName: string, cloumns?: string[], values
 export async function getTableMutiData(tableName: string, columns: string[], values?: string[], method = 'SUM'): Promise<any[]>{
     let con1 = ''
     let con2 = ''
+    columns = columns.map(i => `\`${i}\``)
     if(values != undefined){
+        values = values.map(i => `\`${i}\``)
         con2 += ',' + values.map(i => `${method}(${i}) as ${i}`)
         con1 += ` GROUP BY ${columns}`
     }
@@ -136,6 +138,27 @@ export async function getTableMutiData(tableName: string, columns: string[], val
         console.log('get table mutil data fail')
     }
     return []
+}
+
+export async function createView(source:string, targat: string, columns: string[], values?: string[], method = 'SUM'): Promise<boolean> {
+    let con1 = ''
+    let con2 = ''
+    columns = columns.map(i => `\`${i}\``)
+    if(values != undefined){
+        values = values.map(i => `\`${i}\``)
+        con2 += ',' + values.map(i => `${method}(${i}) as ${i}`)
+        con1 += ` GROUP BY ${columns}`
+    }
+    const dQuery = `CREATE VIEW \`${targat}\` AS SELECT ${columns} ${con2} FROM \`${source}\` ${con1}`
+    console.log(dQuery)
+    try{
+        await db.dataQuery(dQuery)
+    }catch(e){
+        console.log(e)
+        console.log('get table mutil data fail')
+        return false
+    }
+    return true
 }
 
 export async function getTableInfo(tableName: string): Promise<IColums[]> {

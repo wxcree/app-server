@@ -16,6 +16,14 @@ export interface ITableGet {
     tableName: string,
 }
 
+export interface ITableViewAdd {
+    pkgName: string,
+    tableName: string,
+    viewName: string,
+    columns: string[],
+    values: string[] | undefined
+}
+
 export interface ITableMutiGet {
     pkgName: string,
     tableName: string,
