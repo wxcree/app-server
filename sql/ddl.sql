@@ -1,3 +1,7 @@
+#====================#
+#       MariaDB      #
+#====================#
+
 create database sysdb;
 create database dataset;
 use sysdb;
