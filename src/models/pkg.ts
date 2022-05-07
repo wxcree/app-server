@@ -7,7 +7,6 @@ async function getPkgs(content: IPkgGetFrom): Promise<IPkgGetRet> {
     const { pkgName } = content;
     const data: any[] = [];
     const res = await getPkgInfo(pkgName)
-    console.log(res)
     const tmp: any = {}
     let index = 0
     for(const i in res){
