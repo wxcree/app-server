@@ -33,7 +33,7 @@ export async function insertTableByName(pkgName:string, tableName: string, type 
 // INSERT INTO sysdb.business_tables (table_name, db_name, pkgid, create_time, create_user_id, type) VALUES ('testtable', 'dataset', 2, '2022-05-02 11:39:35', null, 0)
 export async function insertTableByid(id:number, tableName: string, type = 0): Promise<boolean> {
     const date = moment().format('YYYY-MM-DD HH:mm:ss')
-    const query = `INSERT INTO ${businessTable} (table_name, db_name, pkgid, create_time, create_user_id, type) VALUES ('${tableName}', '${datadb}', 2, '${date}', null, ${type})`
+    const query = `INSERT INTO ${businessTable} (table_name, db_name, pkgid, create_time, create_user_id, type) VALUES ('${tableName}', '${datadb}', ${id}, '${date}', null, ${type})`
     let ret = true
     try {
         const res: any = await db.sysQuery(query)
