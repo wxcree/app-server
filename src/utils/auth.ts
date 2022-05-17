@@ -8,3 +8,18 @@ export async function getUserInfo(name:string): Promise<any> {
     const ret = res[0][0]
     return ret
 }
+
+export async function registerUser(name:string, password:string): Promise<any> {
+    const query = `INSERT INTO users (username, password, rola) VALUES ('${name}', '${password}', 0)`
+    // console.log(ret[0][0]['id'])
+    let ret = true
+    try {
+        const res: any = await db.sysQuery(query)
+        ret = res[0]['insertId']
+    } catch (e) {
+        ret = false
+        console.log(e)
+        console.log('insertTable fail')
+    }
+    return ret
+}

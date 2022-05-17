@@ -1,5 +1,5 @@
 import router from '../router';
-import { verify } from '../../models/auth';
+import { register, verify } from '../../models/auth';
 import {Request, Response} from "express";
 
 router.route('/auth')
@@ -9,4 +9,10 @@ router.route('/auth')
         res.json(ret);
     })
 
+router.route('/register')
+    .post(async (req: Request, res: Response) => {
+        const authFrom = req.body;
+        const ret = await register(authFrom);
+        res.json(ret);
+    })
 export default router;

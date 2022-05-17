@@ -13,6 +13,9 @@ function path(url: string): IPathRoute {
         "/auth": {
             methods: ["POST"]
         },
+        "/register": {
+            methods: ["POST"]
+        },
         // tables
         "/gettable": {
             methods: ["POST"]
